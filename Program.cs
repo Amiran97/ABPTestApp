@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
-using System.Reflection;
+using ABPTestApp.Models.DTOs.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ExperimentRequestValidator>());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());

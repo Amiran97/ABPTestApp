@@ -1,6 +1,8 @@
 ﻿using ABPTestApp.Domains.Experiment.Queries;
+using ABPTestApp.Models.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ABPTestApp.Controllers
 {
@@ -16,18 +18,18 @@ namespace ABPTestApp.Controllers
 
         [HttpGet]
         [Route("button-color")]
-        public async Task<IActionResult> GetButtonColorAsync([FromQuery(Name = "device-token")] string deviceToken)
+        public async Task<IActionResult> GetButtonColorAsync([FromQuery] ExperimentRequest request)
         {
-            string result = await mediator.Send(new GetButtonColorQuery() { DeviceColor = deviceToken });
-            return Ok(result);
+            string result = await mediator.Send(new GetButtonColorQuery { DeviceColor = request.DeviceToken });
+            return Ok(new ExperimentResponse { Key = "button_color", Value = result });
         }
 
         [HttpGet]
         [Route("price")]
-        public async Task<IActionResult> GetPrice([FromQuery(Name = "device-token")] string deviceToken)
+        public async Task<IActionResult> GetPrice([FromQuery] ExperimentRequest request)
         {
-            int result = await mediator.Send(new GetPriceQuery() { DeviceColor = deviceToken });
-            return Ok(result);
+            int result = await mediator.Send(new GetPriceQuery { DeviceColor = request.DeviceToken });
+            return Ok(new ExperimentResponse { Key = "price", Value = result.ToString() });
         }
     }
 }
