@@ -28,13 +28,10 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
             var maxPercent = prices.Sum(p => p.Percent);
             var random = new Random();
             var randNum = random.Next((int)maxPercent);
-            Console.WriteLine(maxPercent);
-            Console.WriteLine(randNum);
 
             float stepSum = 0;
             foreach (var price in prices)
             {
-                Console.WriteLine("Min: " + stepSum + ", Max: " + (stepSum + price.Percent));
                 if (stepSum <= randNum && randNum < (stepSum + price.Percent))
                 {
                     return Task.FromResult(price.Value);

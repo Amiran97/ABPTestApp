@@ -27,13 +27,10 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
             var maxPercent = buttonColors.Sum(bc => bc.Percent);
             var random = new Random();
             var randNum = random.Next((int)maxPercent);
-            Console.WriteLine(maxPercent);
-            Console.WriteLine(randNum);
 
             float stepSum = 0;
             foreach (var buttonColor in buttonColors)
             {
-                Console.WriteLine("Min: " + stepSum + ", Max: " + (stepSum + buttonColor.Percent));
                 if (stepSum <= randNum && randNum < (stepSum + buttonColor.Percent))
                 {
                     return Task.FromResult(buttonColor.Color);
