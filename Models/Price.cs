@@ -2,7 +2,7 @@
 {
     public class Price
     {
-        public int Value { get; set; }
+        public string? Value { get; set; }
         public float Percent { get; set; }
     }
 }

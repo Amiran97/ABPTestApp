@@ -2,8 +2,8 @@
 
 namespace ABPTestApp.Domains.Experiment.Queries
 {
-    public class GetPriceQuery : IRequest<int>
+    public class GetPriceQuery : IRequest<string>
     {
-        public string? DeviceColor { get; set; }
+        public string? DeviceToken { get; set; }
     }
 }

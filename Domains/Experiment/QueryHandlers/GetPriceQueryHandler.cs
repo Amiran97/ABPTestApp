@@ -1,22 +1,29 @@
 ﻿using ABPTestApp.Domains.Experiment.Queries;
 using ABPTestApp.Models;
+using ABPTestApp.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABPTestApp.Domains.Experiment.QueryHandlers
 {
-    public class GetPriceQueryHandler : IRequestHandler<GetPriceQuery, int>
+    public class GetPriceQueryHandler : IRequestHandler<GetPriceQuery, string>
     {
         private readonly static Random random = new Random(DateTime.Now.Millisecond);
+        private readonly IExperimentRepository repository;
 
         private readonly static ICollection<Price> prices = new List<Price>() {
-            new Price { Value = 10, Percent = 75 },
-            new Price { Value = 20, Percent = 10 },
-            new Price { Value = 50, Percent = 5 },
-            new Price { Value = 5, Percent = 10 }
+            new Price { Value = "10", Percent = 75 },
+            new Price { Value = "20", Percent = 10 },
+            new Price { Value = "50", Percent = 5 },
+            new Price { Value = "5", Percent = 10 }
         };
 
-        private Task<int> getPrice()
+        public GetPriceQueryHandler(IExperimentRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        private Task<string> GetPrice()
         {
             var maxPercent = prices.Sum(p => p.Percent);
             var random = new Random();
@@ -38,10 +45,11 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
             throw new Exception();
         }
 
-
-        public async Task<int> Handle(GetPriceQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(GetPriceQuery request, CancellationToken cancellationToken)
         {
-            return await getPrice();
+            var result = await GetPrice();
+            await repository.CreateAsync(request.DeviceToken, "price", result);
+            return result;
         }
     }
 }

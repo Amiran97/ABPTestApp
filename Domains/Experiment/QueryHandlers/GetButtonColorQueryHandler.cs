@@ -1,5 +1,6 @@
 ﻿using ABPTestApp.Domains.Experiment.Queries;
 using ABPTestApp.Models;
+using ABPTestApp.Services;
 using MediatR;
 
 namespace ABPTestApp.Domains.Experiment.QueryHandlers
@@ -7,6 +8,7 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
     public class GetButtonColorQueryHandler : IRequestHandler<GetButtonColorQuery, string>
     {
         private readonly static Random random = new Random(DateTime.Now.Millisecond);
+        private readonly IExperimentRepository repository;
 
         private readonly static ICollection<ButtonColor> buttonColors = new List<ButtonColor>() {
             new ButtonColor { Color = "#FF0000", Percent = 33.3f },
@@ -14,7 +16,12 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
             new ButtonColor { Color = "#0000FF", Percent = 33.3f }
         };
 
-        private Task<string> getColor()
+        public GetButtonColorQueryHandler(IExperimentRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        private Task<string> GetColor()
         {
             var maxPercent = buttonColors.Sum(bc => bc.Percent);
             var random = new Random();
@@ -38,7 +45,9 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
 
         public async Task<string> Handle(GetButtonColorQuery request, CancellationToken cancellationToken)
         {
-            return await getColor();
+            var result = await GetColor();
+            await repository.CreateAsync(request.DeviceToken, "button-color", result);
+            return result;
         }
     }
 }

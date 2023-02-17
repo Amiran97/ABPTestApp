@@ -1,4 +1,5 @@
 using ABPTestApp.Models.DTOs.Validators;
+using ABPTestApp.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
@@ -9,6 +10,7 @@ builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyCont
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+builder.Services.AddScoped<IExperimentRepository, ExperimentRepository>();
 
 var app = builder.Build();
 
