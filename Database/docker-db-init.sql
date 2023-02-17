@@ -18,10 +18,23 @@ BEGIN
   	ON [dbo].[Experiments]([DeviceToken], [Key]);
 END;
 GO
-CREATE OR ALTER PROCEDURE [dbo].[GetExperimentByDeviceTokenAndKey] 
+CREATE OR ALTER PROCEDURE [dbo].[GetExperimentValueByDeviceTokenAndKey] 
 @DeviceToken NVARCHAR(100), 
 @Key NVARCHAR(32)
 AS
 BEGIN
     SELECT [Value] FROM [dbo].[Experiments] WHERE [DeviceToken] = @DeviceToken AND [Key] = @Key
+END
+GO
+CREATE OR ALTER PROCEDURE [dbo].[GetAllDeviceTokens] 
+AS
+BEGIN
+    SELECT [DeviceToken] FROM [dbo].[Experiments] GROUP BY [DeviceToken]
+END
+GO
+CREATE OR ALTER PROCEDURE [dbo].[GetCountDevicesOfValuesByKey]
+@Key NVARCHAR(32)
+AS
+BEGIN
+    SELECT [Value], COUNT([DeviceToken]) AS DeviceCount FROM [dbo].[Experiments] WHERE [Key] = @Key GROUP BY [Value]
 END

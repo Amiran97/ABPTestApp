@@ -5,9 +5,9 @@ namespace ABPTestApp.Services
 {
     public interface IExperimentRepository
     {
-        Task CreateAsync(string DeviceToken, string Key, string Value);
+        Task CreateAsync(string deviceToken, string key, string value);
         Task CreateAsync(Experiment experiment);
-        Task<ICollection<Experiment>> GetDataAsync();
-        Task<string> GetExperimentValueByDeviceTokenAndKey(string DeviceToken, string Key);
+        Task<string> GetExperimentValueByDeviceTokenAndKeyAsync(string deviceToken, string key);
+        Task<StatisticsResponse> GetStatisticsAsync();
     }
 }

@@ -20,6 +20,30 @@ namespace ABPTestApp.Controllers
             this.mediator = mediator;
         }
 
+
+        /* 
+        This method is not required in the test job.
+        But I decided to add it to automatically fill the DB!
+        */
+        [HttpGet]
+        [Route("fill-600-color")]
+        public async Task<IActionResult> GetButtonColorAsync()
+        {
+            try
+            {
+                for(int i = 1; i <= 600; i++)
+                {
+                    var result = await mediator.Send(new GetButtonColorQuery { DeviceToken = $"test{i}" });
+                }
+                
+                return Ok("DB Fill");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         [Route("button-color")]
         public async Task<IActionResult> GetButtonColorAsync([FromQuery] ExperimentRequest request)
@@ -27,7 +51,7 @@ namespace ABPTestApp.Controllers
             try
             {
                 var result = await mediator.Send(new GetButtonColorQuery { DeviceToken = request.DeviceToken });
-                return Ok(new ExperimentResponse { Key = "button_color", Value = result });
+                return Ok(new ShortExperimentResponse { Key = "button_color", Value = result });
             }  catch(Exception ex) { 
                 return BadRequest(ex.Message);
             }
@@ -40,7 +64,7 @@ namespace ABPTestApp.Controllers
             try
             {
                 var result = await mediator.Send(new GetPriceQuery { DeviceToken = request.DeviceToken });
-                return Ok(new ExperimentResponse { Key = "price", Value = result.ToString() });
+                return Ok(new ShortExperimentResponse { Key = "price", Value = result.ToString() });
             } catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -48,12 +72,12 @@ namespace ABPTestApp.Controllers
         }
 
         [HttpGet]
-        [Route("get-all")]
-        public async Task<IActionResult> GetAll()
+        [Route("statistics")]
+        public async Task<IActionResult> GetStatistics()
         {
             try
             {
-                var result = await mediator.Send(new GetAllQuery());
+                var result = await mediator.Send(new GetStatisticsQuery());
                 return Ok(result);
             }
             catch (Exception ex)

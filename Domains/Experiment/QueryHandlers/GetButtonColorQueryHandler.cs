@@ -48,7 +48,7 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
         {
             if(request.DeviceToken != null)
             {
-                var result = await repository.GetExperimentValueByDeviceTokenAndKey(request.DeviceToken, "button-color");
+                var result = await repository.GetExperimentValueByDeviceTokenAndKeyAsync(request.DeviceToken, "button-color");
                 if (result == null)
                 {
                     result = await GetColor();

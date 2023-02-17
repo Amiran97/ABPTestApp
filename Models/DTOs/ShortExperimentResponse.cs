@@ -2,10 +2,8 @@
 
 namespace ABPTestApp.Models.DTOs
 {
-    public class ExperimentResponse
+    public class ShortExperimentResponse
     {
-        [JsonPropertyName("deviceToken")]
-        public string? DeviceToken { get; set; }
         [JsonPropertyName("key")]
         public string? Key { get; set; }
         [JsonPropertyName("value")]

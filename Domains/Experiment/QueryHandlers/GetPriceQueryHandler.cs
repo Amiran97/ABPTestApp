@@ -49,7 +49,7 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
         {
             if (request.DeviceToken != null)
             {
-                var result = await repository.GetExperimentValueByDeviceTokenAndKey(request.DeviceToken, "price");
+                var result = await repository.GetExperimentValueByDeviceTokenAndKeyAsync(request.DeviceToken, "price");
                 if (result == null)
                 {
                     result = await GetPrice();
