@@ -17,3 +17,11 @@ BEGIN
   CREATE UNIQUE INDEX [UniqueExperiments]
   	ON [dbo].[Experiments]([DeviceToken], [Key]);
 END;
+GO
+CREATE OR ALTER PROCEDURE [dbo].[GetExperimentByDeviceTokenAndKey] 
+@DeviceToken NVARCHAR(100), 
+@Key NVARCHAR(32)
+AS
+BEGIN
+    SELECT [Value] FROM [dbo].[Experiments] WHERE [DeviceToken] = @DeviceToken AND [Key] = @Key
+END

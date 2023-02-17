@@ -2,6 +2,7 @@
 using ABPTestApp.Models;
 using ABPTestApp.Services;
 using MediatR;
+using Microsoft.AspNetCore.Server.IIS.Core;
 
 namespace ABPTestApp.Domains.Experiment.QueryHandlers
 {
@@ -45,9 +46,19 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
 
         public async Task<string> Handle(GetButtonColorQuery request, CancellationToken cancellationToken)
         {
-            var result = await GetColor();
-            await repository.CreateAsync(request.DeviceToken, "button-color", result);
-            return result;
+            if(request.DeviceToken != null)
+            {
+                var result = await repository.GetExperimentValueByDeviceTokenAndKey(request.DeviceToken, "button-color");
+                if (result == null)
+                {
+                    result = await GetColor();
+                    await repository.CreateAsync(request.DeviceToken, "button-color", result);
+                }
+                return result;
+            } else
+            {
+                throw new NullReferenceException("DeviceToken must be not null");
+            }
         }
     }
 }

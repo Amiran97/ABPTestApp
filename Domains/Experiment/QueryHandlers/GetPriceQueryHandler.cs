@@ -47,9 +47,20 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
 
         public async Task<string> Handle(GetPriceQuery request, CancellationToken cancellationToken)
         {
-            var result = await GetPrice();
-            await repository.CreateAsync(request.DeviceToken, "price", result);
-            return result;
+            if (request.DeviceToken != null)
+            {
+                var result = await repository.GetExperimentValueByDeviceTokenAndKey(request.DeviceToken, "price");
+                if (result == null)
+                {
+                    result = await GetPrice();
+                    await repository.CreateAsync(request.DeviceToken, "price", result);
+                }
+                return result;
+            }
+            else
+            {
+                throw new NullReferenceException("DeviceToken must be not null");
+            }
         }
     }
 }

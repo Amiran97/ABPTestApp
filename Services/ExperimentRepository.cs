@@ -1,6 +1,5 @@
 ﻿using ABPTestApp.Models;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.Extensions.Configuration;
+using ABPTestApp.Models.DTOs;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -78,6 +77,29 @@ namespace ABPTestApp.Services
                     }
                 }
                 return experiments;
+            }
+        }
+
+        public async Task<string> GetExperimentValueByDeviceTokenAndKey(string DeviceToken, string Key)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand("[dbo].[GetExperimentByDeviceTokenAndKey]", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@deviceToken", DeviceToken));
+                command.Parameters.Add(new SqlParameter("@key", Key));
+                var reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        return reader.GetString("Value");
+                    }
+                }
+                return null;
             }
         }
     }
