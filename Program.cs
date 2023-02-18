@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddScoped<IExperimentRepository, ExperimentRepository>();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -20,8 +21,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints => {
+    endpoints.MapRazorPages();
+    endpoints.MapControllers();
+});
 
 app.Run();

@@ -1,0 +1,95 @@
+﻿@page
+@model ABPTestApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+@if(Model.Statistics == null)
+{
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+} else {
+    <div class="conteiner-fluid">
+        <div class="card w-100">
+            <div class="card-header d-flex justify-content-center">
+                <h1>Statistics</h1>
+            </div>
+            <div class="card-body conteiner-fluid">
+                <div class="row d-flex justify-content-center">
+                    <h3>Count devices: @Model.Statistics.CountDevices</h3>
+                </div>
+                @if (Model.Statistics.CountDevicesOfValuesByKeys != null)
+                {
+                    <div class="row d-flex">
+                    @foreach (var item in Model.Statistics.CountDevicesOfValuesByKeys)
+                    {
+                        <div class="card col-5 p-0 my-3 mx-auto">
+                            <div class="card-header">
+                                <h3 class="d-flex justify-content-sm-center">Key: @item.Key</h3>
+                            </div>
+                            <div class="card-body p-0">
+                                @if (item.CountDevicesOfValues != null)
+                                {
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">Option</th>
+                                                <th scope="col" class="text-center">Count devices</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var subItem in item.CountDevicesOfValues)
+                                            {
+                                                <tr>
+                                                    <th scope="row" class="text-center">@subItem.Value</th>
+                                                    <td class="text-center">@subItem.CountDevices</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                            </div>
+                        </div>
+                    }
+                    </div>
+                }
+                @if (Model.Statistics.Experiments != null)
+                {
+                    <div class="row d-flex justify-content-center">
+                        <div class="card my-3 col-11 p-0">
+                            <div class="card-header">
+                                <h3 class="d-flex justify-content-sm-center">All experiments</h3>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">#</th>
+                                            <th scope="col" class="text-center">Device token</th>
+                                            <th scope="col" class="text-center">Key</th>
+                                            <th scope="col" class="text-center">Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{int index = 1;}
+                                        @foreach (var item in Model.Statistics.Experiments.OrderBy(e => e.DeviceToken))
+                                        {
+                                            <tr>
+                                                <th scope="row" class="text-center">@index</th>
+                                                <td class="text-center">@item.DeviceToken</td>
+                                                <td class="text-center">@item.Key</td>
+                                                <td class="text-center">@item.Value</td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

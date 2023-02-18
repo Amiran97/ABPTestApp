@@ -26,14 +26,15 @@ namespace ABPTestApp.Controllers
         But I decided to add it to automatically fill the DB!
         */
         [HttpGet]
-        [Route("fill-600-color")]
-        public async Task<IActionResult> GetButtonColorAsync()
+        [Route("fill-600-devices")]
+        public async Task<IActionResult> GetFillAsync()
         {
             try
             {
                 for(int i = 1; i <= 600; i++)
                 {
-                    var result = await mediator.Send(new GetButtonColorQuery { DeviceToken = $"test{i}" });
+                    await mediator.Send(new GetButtonColorQuery { DeviceToken = $"test{i}" });
+                    await mediator.Send(new GetPriceQuery { DeviceToken = $"test{i}" });
                 }
                 
                 return Ok("DB Fill");
