@@ -1,5 +1,4 @@
 ﻿using ABPTestApp.Models;
-using ABPTestApp.Models.DTOs;
 
 namespace ABPTestApp.Utils
 {

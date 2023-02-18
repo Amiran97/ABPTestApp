@@ -1,14 +1,9 @@
 ﻿using ABPTestApp.Domains.Experiment.Commands;
 using ABPTestApp.Domains.Experiment.Queries;
 using ABPTestApp.Models.DTOs;
-using FluentValidation;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.ComponentModel;
-using System.Data.SqlClient;
 
 namespace ABPTestApp.Controllers
 {
@@ -25,7 +20,7 @@ namespace ABPTestApp.Controllers
         [HttpGet]
         [Route("fill-600-devices")]
         [Obsolete]
-        [SwaggerOperation(Summary = "This method is not required in the test job.\nBut I decided to add it to automatically fill the DB!")]
+        [SwaggerOperation(Summary = "This method is not required in the test job.\nBut I added it to automatically fill the DB!")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]

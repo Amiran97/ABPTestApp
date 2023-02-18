@@ -19,5 +19,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - DB_CONNECTION_STRING=Server=mssqldb;Database=ABPTestDB;User=sa;Password=1Secure*Password1
+      - REDIS_CONNECTION_STRING=redis:6379,abortConnect=False
     depends_on:
       - mssqldb
+      - redis
+
+  redis:
+    image: redis
+    container_name: cache
+    ports:
+      - "6379:6379"

@@ -1,28 +1,24 @@
+using ABPTestApp.Domains.Experiment.Queries;
 using ABPTestApp.Models.DTOs;
 using ABPTestApp.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ABPTestApp.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly IExperimentRepository repository;
+        private readonly ISender mediator;
         public StatisticsResponse? Statistics { get; set; }
 
-        public IndexModel(IExperimentRepository repository)
+        public IndexModel(ISender mediator)
         {
-            this.repository = repository;
+            this.mediator = mediator;
         }
 
         public async Task OnGetAsync()
         {
-            Statistics = await repository.GetStatisticsAsync();
-            
-        }
-
-        public void OnClick()
-        {
-            Console.WriteLine("Click event");
+            Statistics = await mediator.Send(new GetStatisticsQuery());
         }
     }
 }
