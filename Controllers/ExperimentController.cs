@@ -4,6 +4,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.ComponentModel;
 using System.Data.SqlClient;
@@ -20,13 +21,13 @@ namespace ABPTestApp.Controllers
             this.mediator = mediator;
         }
 
-
-        /* 
-        This method is not required in the test job.
-        But I decided to add it to automatically fill the DB!
-        */
         [HttpGet]
         [Route("fill-600-devices")]
+        [Obsolete]
+        [SwaggerOperation(Summary = "This method is not required in the test job.\nBut I decided to add it to automatically fill the DB!")]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> GetFillAsync()
         {
             try
@@ -47,7 +48,13 @@ namespace ABPTestApp.Controllers
 
         [HttpGet]
         [Route("{key}")]
-        public async Task<IActionResult> GetExperimentAsync([FromRoute] string key, [FromQuery] ExperimentRequest request)
+        [ProducesResponseType(typeof(ShortExperimentResponse), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        [SwaggerOperation("This method create and return new or old experiment!")]
+        public async Task<IActionResult> GetExperimentAsync(
+            [SwaggerParameter("Enter key for experiment. Key must be only 'button-color' or 'price'!")][FromRoute] string key,
+            [FromQuery] ExperimentRequest request)
         {
             if(!string.IsNullOrWhiteSpace(key) && (key.Equals("price") || key.Equals("button-color")))
             {
@@ -68,6 +75,10 @@ namespace ABPTestApp.Controllers
 
         [HttpGet]
         [Route("statistics")]
+        [ProducesResponseType(typeof(StatisticsResponse), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        [SwaggerOperation("This method return all statistics by experiments!")]
         public async Task<IActionResult> GetStatisticsAsync()
         {
             try
