@@ -2,16 +2,15 @@ version: '3.4'
 
 services:
   mssqldb:
-    image: mcr.microsoft.com/mssql/server:2017-latest
     container_name: 'mssqldb'
-    environment:
-      - SA_PASSWORD=1Secure*Password1
-      - ACCEPT_EULA=Y
+    build:
+       dockerfile: ./Database/Dockerfile
     ports:
       - "1433:1433"
 
   abptestapp:
     image: ${DOCKER_REGISTRY-}abptestapp
+    container_name: 'abptestapp'
     build:
       context: .
       dockerfile: Dockerfile
@@ -19,6 +18,14 @@ services:
       - "5000:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - DB_CONNECTION_STRING=Server=mssqldb;Database=NewsFeedDb;User=sa;Password=1Secure*Password1
+      - DB_CONNECTION_STRING=Server=mssqldb;Database=ABPTestDB;User=sa;Password=1Secure*Password1
+      - REDIS_CONNECTION_STRING=redis:6379,abortConnect=False
     depends_on:
       - mssqldb
+      - redis
+
+  redis:
+    image: redis
+    container_name: cache
+    ports:
+      - "6379:6379"
