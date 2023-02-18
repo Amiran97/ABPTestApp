@@ -1,6 +1,6 @@
 ﻿using ABPTestApp.Models;
 using ABPTestApp.Models.DTOs;
-using ABPTestApp.Options;
+using ABPTestApp.Utils;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -94,13 +94,13 @@ namespace ABPTestApp.Services
                 var countDevicesOfValuesByKeys = new List<CountDevicesOfValuesByKeyResponse>();
                 var countDevicesOfValuesByButtonColors = await GetCountDevicesOfValuesByKeyAsync(connection, "button-color");
                 var countDevicesOfValuesByPrices = await GetCountDevicesOfValuesByKeyAsync(connection, "price");
-                ExperimentValuesOptions.ButtonColors.ToList().ForEach(color =>
+                ExperimentUtil.ButtonColors.ToList().ForEach(color =>
                 {
                     if (countDevicesOfValuesByButtonColors.FirstOrDefault(item => item.Value.Equals(color.Value)) == null) {
                         countDevicesOfValuesByButtonColors.Add(new CountDevicesOfValueResponse { Value = color.Value, CountDevices = 0 });
                     }
                 });
-                ExperimentValuesOptions.Prices.ToList().ForEach(price =>
+                ExperimentUtil.Prices.ToList().ForEach(price =>
                 {
                     if (countDevicesOfValuesByPrices.FirstOrDefault(item => item.Value.Equals(price.Value)) == null)
                     {

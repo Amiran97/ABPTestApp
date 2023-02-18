@@ -1,4 +1,5 @@
-﻿using ABPTestApp.Domains.Experiment.Queries;
+﻿using ABPTestApp.Domains.Experiment.Commands;
+using ABPTestApp.Domains.Experiment.Queries;
 using ABPTestApp.Models.DTOs;
 using FluentValidation;
 using FluentValidation.Results;
@@ -32,12 +33,7 @@ namespace ABPTestApp.Controllers
         {
             try
             {
-                for(int i = 1; i <= 600; i++)
-                {
-                    await mediator.Send(new GetExperimentQuery { DeviceToken = $"test{i}", Key = "button-color" });
-                    await mediator.Send(new GetExperimentQuery { DeviceToken = $"test{i}", Key = "price" });
-                }
-                
+                await mediator.Send(new FillDatabaseCommand());
                 return Ok("DB Fill");
             }
             catch (Exception ex)
