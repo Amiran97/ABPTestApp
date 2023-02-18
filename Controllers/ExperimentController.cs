@@ -33,8 +33,8 @@ namespace ABPTestApp.Controllers
             {
                 for(int i = 1; i <= 600; i++)
                 {
-                    await mediator.Send(new GetButtonColorQuery { DeviceToken = $"test{i}" });
-                    await mediator.Send(new GetPriceQuery { DeviceToken = $"test{i}" });
+                    await mediator.Send(new GetExperimentQuery { DeviceToken = $"test{i}", Key = "button-color" });
+                    await mediator.Send(new GetExperimentQuery { DeviceToken = $"test{i}", Key = "price" });
                 }
                 
                 return Ok("DB Fill");
@@ -46,29 +46,23 @@ namespace ABPTestApp.Controllers
         }
 
         [HttpGet]
-        [Route("button-color")]
-        public async Task<IActionResult> GetButtonColorAsync([FromQuery] ExperimentRequest request)
+        [Route("{key}")]
+        public async Task<IActionResult> GetExperimentAsync([FromRoute] string key, [FromQuery] ExperimentRequest request)
         {
-            try
+            if(!string.IsNullOrWhiteSpace(key) && (key.Equals("price") || key.Equals("button-color")))
             {
-                var result = await mediator.Send(new GetButtonColorQuery { DeviceToken = request.DeviceToken });
-                return Ok(new ShortExperimentResponse { Key = "button_color", Value = result });
-            }  catch(Exception ex) { 
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("price")]
-        public async Task<IActionResult> GetPrice([FromQuery] ExperimentRequest request)
-        {
-            try
+                try
+                {
+                    var result = await mediator.Send(new GetExperimentQuery { DeviceToken = request.DeviceToken, Key = key });
+                    return Ok(new ShortExperimentResponse { Key = key, Value = result });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            } else
             {
-                var result = await mediator.Send(new GetPriceQuery { DeviceToken = request.DeviceToken });
-                return Ok(new ShortExperimentResponse { Key = "price", Value = result.ToString() });
-            } catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
+                return BadRequest("Invalid key! Key must be 'button-color' or 'price'");
             }
         }
 
