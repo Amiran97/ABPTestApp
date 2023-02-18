@@ -1,5 +1,6 @@
 ﻿using ABPTestApp.Domains.Experiment.Queries;
 using ABPTestApp.Models;
+using ABPTestApp.Options;
 using ABPTestApp.Services;
 using MediatR;
 
@@ -9,18 +10,6 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
     {
         private readonly static Random random = new Random(DateTime.Now.Millisecond);
         private readonly IExperimentRepository repository;
-
-        private readonly static ICollection<ExperimentValue> buttonColors = new List<ExperimentValue>() {
-            new ExperimentValue { Value = "#FF0000", Percent = 33.3f },
-            new ExperimentValue { Value = "#00FF00", Percent = 33.3f },
-            new ExperimentValue { Value = "#0000FF", Percent = 33.3f }
-        };
-        private readonly static ICollection<ExperimentValue> prices = new List<ExperimentValue>() {
-            new ExperimentValue { Value = "10", Percent = 75 },
-            new ExperimentValue { Value = "20", Percent = 10 },
-            new ExperimentValue { Value = "50", Percent = 5 },
-            new ExperimentValue { Value = "5", Percent = 10 }
-        };
 
         public GetExperimentQueryHandler(IExperimentRepository repository)
         {
@@ -33,10 +22,10 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
             switch(key)
             {
                 case "button-color":
-                    values = buttonColors;
+                    values = ExperimentValuesOptions.ButtonColors;
                     break;
                 case "price":
-                    values = prices;
+                    values = ExperimentValuesOptions.Prices;
                     break;
                 default:
                     throw new ArgumentException("Invalid key!");
@@ -57,7 +46,6 @@ namespace ABPTestApp.Domains.Experiment.QueryHandlers
 
             throw new Exception();
         }
-
 
         public async Task<string> Handle(GetExperimentQuery request, CancellationToken cancellationToken)
         {

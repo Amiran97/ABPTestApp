@@ -68,7 +68,7 @@ namespace ABPTestApp.Controllers
 
         [HttpGet]
         [Route("statistics")]
-        public async Task<IActionResult> GetStatistics()
+        public async Task<IActionResult> GetStatisticsAsync()
         {
             try
             {
